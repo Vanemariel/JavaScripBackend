@@ -1,0 +1,22 @@
+[
+  {
+    "id": "1",
+    "title": "Notebook Lenovo IdeaPad",
+    "description": "Notebook 15.6'' AMD Ryzen 5 8GB RAM 256GB SSD",
+    "code": "NB-LENOVO-01",
+    "price": 450000,
+    "status": true,
+    "stock": 12,
+    "category": "Tecnología"
+  },
+  {
+    "id": "2",
+    "title": "Mouse Logitech Inalámbrico",
+    "description": "Mouse ergonómico con conexión USB inalámbrica",
+    "code": "MOUSE-LOGI-02",
+    "price": 12000,
+    "status": true,
+    "stock": 50,
+    "category": "Periféricos"
+  }
+]
