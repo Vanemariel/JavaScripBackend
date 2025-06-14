@@ -1,0 +1,63 @@
+const { loadFile, saveFile } = require('../utils/fileManager');
+const path = require('path');
+const cartsPath = path.join(__dirname, '../../data/carts.json');
+const productsPath = path.join(__dirname, '../../data/products.json');
+
+exports.createCart = () => {
+  const carts = loadFile(cartsPath);
+  const newCart = { id: Date.now().toString(), products: [] };
+  carts.push(newCart);
+  saveFile(cartsPath, carts);
+  return newCart;
+};
+
+exports.getAllCarts = () => loadFile(cartsPath);
+
+exports.getCartProducts = (cid) => {
+  const carts = loadFile(cartsPath);
+  const cart = carts.find(c => c.id === cid);
+  return cart ? cart.products : null;
+};
+
+exports.addProductToCart = (cid, pid, quantity) => {
+  if (!quantity || typeof quantity !== 'number') return { error: 'Quantity inválido', status: 400 };
+  const products = loadFile(productsPath);
+  if (!products.some(p => p.id === pid)) return { error: 'Producto no existe', status: 404 };
+
+  const carts = loadFile(cartsPath);
+  const cart = carts.find(c => c.id === cid);
+  if (!cart) return { error: 'Carrito no encontrado', status: 404 };
+
+  const prod = cart.products.find(p => p.product === pid);
+  if (prod) {
+    prod.quantity += quantity;
+  } else {
+    cart.products.push({ product: pid, quantity });
+  }
+
+  saveFile(cartsPath, carts);
+  return cart;
+};
+
+exports.removeProductFromCart = (cid, pid) => {
+  const carts = loadFile(cartsPath);
+  const cart = carts.find(c => c.id === cid);
+  if (!cart) return { error: 'Carrito no encontrado', status: 404 };
+
+  const initial = cart.products.length;
+  cart.products = cart.products.filter(p => p.product !== pid);
+  if (cart.products.length === initial) return { error: 'Producto no encontrado en el carrito', status: 404 };
+
+  saveFile(cartsPath, carts);
+  return cart;
+};
+
+exports.emptyCart = (cid) => {
+  const carts = loadFile(cartsPath);
+  const cart = carts.find(c => c.id === cid);
+  if (!cart) return { error: 'Carrito no encontrado' };
+
+  cart.products = [];
+  saveFile(cartsPath, carts);
+  return cart;
+};
