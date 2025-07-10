@@ -3,7 +3,7 @@ const path = require('path');
 const cartsPath = path.join(__dirname, '../../data/carts.json');
 const productsPath = path.join(__dirname, '../../data/products.json');
 
-exports.createCart = () => {
+exports.createCart = async () => {
   const carts = loadFile(cartsPath);
   const newCart = { id: Date.now().toString(), products: [] };
   carts.push(newCart);
@@ -11,19 +11,19 @@ exports.createCart = () => {
   return newCart;
 };
 
-exports.getAllCarts = () => loadFile(cartsPath);
+exports.getAllCarts = async() => loadFile(cartsPath);
 
-exports.getCartById = (cid) => {
+exports.getCartById = async (cid) => {
   const carts = loadFile(cartsPath);
   return carts.find(c => c.id === cid) || null;
 };
 
-exports.getCartProducts = (cid) => {
+exports.getCartProducts = async (cid) => {
   const cart = exports.getCartById(cid);
   return cart ? cart.products : null;
 };
 
-exports.addProductToCart = (cid, pid, quantity) => {
+exports.addProductToCart = async (cid, pid, quantity) => {
   if (!quantity || typeof quantity !== 'number') return { error: 'Quantity inválido', status: 400 };
   const products = loadFile(productsPath);
   if (!products.some(p => p.id === pid)) return { error: 'Producto no existe', status: 404 };
@@ -43,7 +43,7 @@ exports.addProductToCart = (cid, pid, quantity) => {
   return cart;
 };
 
-exports.removeProductFromCart = (cid, pid) => {
+exports.removeProductFromCart = async (cid, pid) => {
   const carts = loadFile(cartsPath);
   const cart = carts.find(c => c.id === cid);
   if (!cart) return { error: 'Carrito no encontrado', status: 404 };
@@ -56,7 +56,7 @@ exports.removeProductFromCart = (cid, pid) => {
   return cart;
 };
 
-exports.emptyCart = (cid) => {
+exports.emptyCart = async (cid) => {
   const carts = loadFile(cartsPath);
   const cart = carts.find(c => c.id === cid);
   if (!cart) return { error: 'Carrito no encontrado' };
