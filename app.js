@@ -8,6 +8,9 @@ const io = new Server(http);
 
 const cartRoutes = require('./src/routes/cartRoutes');
 const productRoutes = require('./src/routes/productRoutes');
+const viewsRouter = require('./src/routes/viewsRouter');
+app.use('/', viewsRouter);
+
 
 app.engine('handlebars', engine());
 app.set('view engine', 'handlebars');
